@@ -1,32 +1,72 @@
-# React + TypeScript + Vite
+# CalcInk — On-Device Handwritten Math Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+CalcInk is a responsive web-based digital notebook that allows users to write
+mathematical expressions using a mouse, stylus, or touch input.
 
-Currently, two official plugins are available:
+The application captures handwritten strokes, recognizes the mathematical
+expression directly in the browser, evaluates the expression using a
+deterministic math parser, and displays the calculated result.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application is designed to run entirely on-device without sending
+handwriting data to a remote server.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the Oxlint configuration
+### Handwriting Canvas
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- Mouse, stylus, and touch input
+- Smooth real-time drawing
+- High-DPI / Retina canvas support
+- Adjustable stroke width
+- Pen mode
+- Stroke eraser
+- Undo
+- Redo
+- Clear canvas
+- Responsive canvas layout
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+### Handwriting Recognition
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+CalcInk uses a pretrained handwritten mathematical expression recognition
+model running locally in the browser.
+
+Supported mathematical vocabulary includes:
+
+- Digits `0–9`
+- Addition `+`
+- Subtraction `−`
+- Multiplication `×`
+- Division `÷`
+- Decimal `.`
+- Terminal `=`
+
+Recognition is performed using ONNX Runtime Web.
+
+### Mathematical Evaluation
+
+CalcInk includes a deterministic mathematical expression parser supporting:
+
+- Operator precedence (BODMAS / PEMDAS)
+- Multi-digit numbers
+- Decimal numbers
+- Negative numbers
+- Addition
+- Subtraction
+- Multiplication
+- Division
+- Division-by-zero handling
+- Invalid-expression handling
+
+The application does not use JavaScript `eval()` for evaluating user input.
+
+### On-Device Processing
+
+The recognition model is stored locally with the application:
+
+```text
+public/models/comer/
+├── encoder_int8.onnx
+├── decoder_int8.onnx
+└── vocab.json
